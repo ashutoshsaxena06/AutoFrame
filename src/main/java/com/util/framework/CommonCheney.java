@@ -140,7 +140,7 @@ public class CommonCheney {
 			}
 
 			logger.info(removeColumns.size() + " and " + OG_Col.size());
-//			Assert.assertEquals(OG_Col.size(), 7);
+			Assert.assertEquals(OG_Col.size(), 7);
 
 			for (String column : removeColumns) {
 				wait.until(ExpectedConditions
