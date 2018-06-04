@@ -19,25 +19,32 @@ public class CommonUSFoods {
 	public static String url = "https://www3.usfoods.com/order/faces/oracle/webcenter/portalapp/pages/login.jspx";
 	CommonUSFoods com;
 
+	public static WebDriver getDriver() {
+		return driver;
+	}
+
+	public static void setDriver(WebDriver driver) {
+		CommonUSFoods.driver = driver;
+	}
+	
 	// login page
 	// username
 	
 	@FindBy(xpath = ".//*[@id='it9::content']")
-	static WebElement txt_UserName;
-	// password
+	WebElement txt_UserName;
 	
+	// password
 	@FindBy(xpath = ".//*[@id='it1::content']")
-	static WebElement txt_Password;
+	WebElement txt_Password;
 
 	// login button
-	@FindBy(xpath =
-			".//*[@id='cb1']")
-	static WebElement btn_Submit;
+	@FindBy(xpath =".//*[@id='cb1']")
+	WebElement btn_Submit;
 
 	// home page
 	// List - to use for order
 	@FindBy(xpath = ".//*[@id='dgfSPT:pt_i3:0:pt_sfm1:pt_cil7']")
-	static WebElement li_ListIcon;
+	WebElement li_ListIcon;
 
 	// List selection
 	public void setOrderGuide(String OGName) {
@@ -47,12 +54,12 @@ public class CommonUSFoods {
 
 	// Download icon
 	@FindBy(xpath = "//td/*[@id='r1:0:pt1:cil15']/span")
-	static WebElement btn_ListIcon;
+	WebElement btn_ListIcon;
 
 	// Download pop-up
 	// FileName
 	@FindBy(xpath = ".//*[@id='r1:0:pt1:r5:0:it1::content']")
-	static WebElement txt_FileName;
+	WebElement txt_FileName;
 
 	// Format
 	@FindBy(xpath = ".//*[@id='r1:0:pt1:r5:0:soc4']/..//div[(text()='CSV')]")
@@ -64,7 +71,7 @@ public class CommonUSFoods {
 	
 	// Download button
 	@FindBy(xpath = ".//*[@id='r1:0:pt1:r5:0:cb3']")
-	static WebElement btn_download;
+	WebElement btn_download;
 	
 	// format to CSV
 	@FindBy(xpath = ".//*[@id='r1:0:pt1:r5:0:soc4']/..//div/ul/li/a[text()='CSV']")
@@ -74,18 +81,17 @@ public class CommonUSFoods {
 	@FindBy(id="dgfSPT:pt_cl21")
 	WebElement btn_SignOut;
 			
-	public  CommonUSFoods(WebDriver driver) {
-		CommonUSFoods.driver=driver;
-		PageFactory.initElements(driver, this);
+	public  CommonUSFoods() {
+		PageFactory.initElements(getDriver(), this);
 	}
 	
 	public Boolean startUSF (String listname, String username, String password) throws InterruptedException {
 //		driver = RandomAction.openBrowser("Chrome", "C:\\Users\\my\\Downloads\\chromedriver_win32_new\\chromedriver.exe");
-		com = new CommonUSFoods(driver);
-		wait = new WebDriverWait(driver, 10);
+		com = new CommonUSFoods();
+		wait = new WebDriverWait(getDriver(), 30);
 		
 		try {
-			login(username, password);
+			com.login(username, password);
 		}catch (Exception e) {
 		e.printStackTrace();
 		System.out.println("Login Failed ! ");
@@ -120,31 +126,30 @@ public class CommonUSFoods {
 		driver.get(url);
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		Thread.sleep(3000);
-		CommonUSFoods.txt_UserName.sendKeys(username);
-		CommonUSFoods.txt_Password.sendKeys(password);
-		CommonUSFoods.btn_Submit.click();		
+		wait.until(ExpectedConditions.visibilityOf(com.txt_UserName)).sendKeys(username);
+		wait.until(ExpectedConditions.visibilityOf(com.txt_Password)).sendKeys(username);
+		wait.until(ExpectedConditions.visibilityOf(com.btn_Submit)).click();
 	}
 	
 	public void clickList(String listname) throws InterruptedException {
 		Actions act = new Actions(driver);
-		act.moveToElement(CommonUSFoods.li_ListIcon).build().perform();
+		act.moveToElement(wait.until(ExpectedConditions.visibilityOf(com.li_ListIcon))).build().perform();
 		com.setOrderGuide(listname);
-		CommonUSFoods.OrderGuide.click();
+		wait.until(ExpectedConditions.visibilityOf(CommonUSFoods.OrderGuide)).click();
 		Thread.sleep(5000);
-		act.moveToElement(btn_ListIcon).build().perform();
+		act.moveToElement(wait.until(ExpectedConditions.visibilityOf(btn_ListIcon))).build().perform();
 		System.out.println(btn_ListIcon.getText());
 		Thread.sleep(5000);
-		CommonUSFoods.btn_ListIcon.click();
+		wait.until(ExpectedConditions.visibilityOf(com.btn_ListIcon)).click();
 	}
 	
 	public void downloadFile(String filename) {
-		CommonUSFoods.txt_FileName.sendKeys(filename);
-		if (!com.txt_Format.getText().equalsIgnoreCase("CSV")) {
-			com.lnk_FormatSelectIcon.click();
-			com.lnk_FormatSelectCSV.click();
+		wait.until(ExpectedConditions.visibilityOf(com.txt_FileName)).sendKeys(filename);
+		if (!wait.until(ExpectedConditions.visibilityOf(com.txt_Format)).getText().equalsIgnoreCase("CSV")) {
+			wait.until(ExpectedConditions.visibilityOf(com.lnk_FormatSelectIcon)).click();
+			wait.until(ExpectedConditions.visibilityOf(com.lnk_FormatSelectCSV)).click();
 		}
-		
-		CommonUSFoods.btn_download.click();
+		wait.until(ExpectedConditions.visibilityOf(com.btn_download)).click();
 	}
 
 }
