@@ -12,12 +12,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CommonUSFoods {
-
+	static final int maxtry = 3;
+	static int retry = 0;
 	public static WebElement OrderGuide;
 	public static WebDriver driver;
 	public static WebDriverWait wait;
 	public static String url = "https://www3.usfoods.com/order/faces/oracle/webcenter/portalapp/pages/login.jspx";
-	CommonUSFoods com;
+	public static CommonUSFoods com;
 
 	public static WebDriver getDriver() {
 		return driver;
@@ -53,7 +54,7 @@ public class CommonUSFoods {
 	}
 
 	// Download icon
-	@FindBy(xpath = "//td/*[@id='r1:0:pt1:cil15']/span")
+	@FindBy(xpath = "//td/*[@id='r1:0:pt1:cil15']/img")
 	WebElement btn_ListIcon;
 
 	// Download pop-up
@@ -124,27 +125,41 @@ public class CommonUSFoods {
 
 	public void login(String username, String password) throws InterruptedException {
 		driver.get(url);
+		while (retry<maxtry) {
+			if (!driver.getCurrentUrl().contains("www3.usfoods.com")) {
+				Thread.sleep(3000);	
+				}
+			else {
+				break;
+			}
+		}
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		Thread.sleep(3000);
-		wait.until(ExpectedConditions.visibilityOf(com.txt_UserName)).sendKeys(username);
-		wait.until(ExpectedConditions.visibilityOf(com.txt_Password)).sendKeys(username);
-		wait.until(ExpectedConditions.visibilityOf(com.btn_Submit)).click();
+		WebElement userName = wait.until(ExpectedConditions.visibilityOf(com.txt_UserName));
+		userName.sendKeys(username);
+		WebElement pwd = wait.until(ExpectedConditions.visibilityOf(com.txt_Password));
+		pwd.sendKeys(password);
+		WebElement submit = wait.until(ExpectedConditions.visibilityOf(com.btn_Submit));
+		submit.click();
 	}
 	
 	public void clickList(String listname) throws InterruptedException {
 		Actions act = new Actions(driver);
-		act.moveToElement(wait.until(ExpectedConditions.visibilityOf(com.li_ListIcon))).build().perform();
+		WebElement listIcon = wait.until(ExpectedConditions.visibilityOf(com.li_ListIcon));
+		act.moveToElement(listIcon).build().perform();
 		com.setOrderGuide(listname);
-		wait.until(ExpectedConditions.visibilityOf(CommonUSFoods.OrderGuide)).click();
+		CommonUSFoods.OrderGuide.click();
 		Thread.sleep(5000);
-		act.moveToElement(wait.until(ExpectedConditions.visibilityOf(btn_ListIcon))).build().perform();
-		System.out.println(btn_ListIcon.getText());
+		WebElement ListBtn = wait.until(ExpectedConditions.elementToBeClickable(com.btn_ListIcon));
+		act.moveToElement(ListBtn).build().perform();
+		act.click().perform();
+//		System.out.println(ListBtn.getText());
 		Thread.sleep(5000);
-		wait.until(ExpectedConditions.visibilityOf(com.btn_ListIcon)).click();
 	}
 	
 	public void downloadFile(String filename) {
-		wait.until(ExpectedConditions.visibilityOf(com.txt_FileName)).sendKeys(filename);
+		WebElement In_filename = wait.until(ExpectedConditions.visibilityOf(com.txt_FileName));
+		In_filename.sendKeys(filename);
 		if (!wait.until(ExpectedConditions.visibilityOf(com.txt_Format)).getText().equalsIgnoreCase("CSV")) {
 			wait.until(ExpectedConditions.visibilityOf(com.lnk_FormatSelectIcon)).click();
 			wait.until(ExpectedConditions.visibilityOf(com.lnk_FormatSelectCSV)).click();
