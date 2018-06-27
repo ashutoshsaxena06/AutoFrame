@@ -15,6 +15,7 @@ import java.util.List;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -30,12 +31,11 @@ public class RandomAction {
 	/*
 	 * public static File WaitForNewFile(Path folder, String extension, int
 	 * timeout_sec) throws InterruptedException, IOException { long end_time =
-	 * System.currentTimeMillis() + timeout_sec * 1000; try (WatchService
-	 * watcher = FileSystems.getDefault().newWatchService()) {
-	 * folder.register(watcher, StandardWatchEventKinds.ENTRY_MODIFY); for
-	 * (WatchKey key; null != (key = watcher.poll(end_time -
-	 * System.currentTimeMillis(), TimeUnit.MILLISECONDS)); key.reset()) { for
-	 * (WatchEvent<?> event : key.pollEvents()) { File file =
+	 * System.currentTimeMillis() + timeout_sec * 1000; try (WatchService watcher =
+	 * FileSystems.getDefault().newWatchService()) { folder.register(watcher,
+	 * StandardWatchEventKinds.ENTRY_MODIFY); for (WatchKey key; null != (key =
+	 * watcher.poll(end_time - System.currentTimeMillis(), TimeUnit.MILLISECONDS));
+	 * key.reset()) { for (WatchEvent<?> event : key.pollEvents()) { File file =
 	 * folder.resolve(((WatchEvent<Path>) event).context()).toFile(); if
 	 * (file.toString().toLowerCase().endsWith(extension.toLowerCase())) return
 	 * file; } } } return null; }
@@ -44,6 +44,7 @@ public class RandomAction {
 	public static void main(String[] args) {
 		System.out.println("main");
 	}
+
 	public static String getDate() {
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
 		Calendar calobj = Calendar.getInstance();
@@ -83,7 +84,7 @@ public class RandomAction {
 	}
 
 	public static String setdownloadDir() {
-		File files = new File(System.getProperty("user.home")+"\\Downloads\\" + getDate());
+		File files = new File(System.getProperty("user.home") + "\\Downloads\\" + getDate());
 
 		if (!files.exists()) {
 			if (files.mkdir()) {
@@ -94,8 +95,7 @@ public class RandomAction {
 		}
 		String filepath = files.getPath();
 		return filepath;
-		
-		
+
 	}
 
 	public static WebDriver setDownloadFilePath() {
@@ -114,50 +114,47 @@ public class RandomAction {
 	}
 
 	public static File getLatestFilefromDirxlsx(String dirPath) {
-		
-		  File getLatestFilefromDir = null;
-		    File dir = new File(dirPath);
-		    FileFilter fileFilter = new WildcardFileFilter("*." + "xlsx");
-		    File[] files = dir.listFiles(fileFilter);
 
-		    if (files.length > 0) {
-		        /** The newest file comes first **/
-		        Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-		        getLatestFilefromDir = files[0];
-		    }
+		File getLatestFilefromDir = null;
+		File dir = new File(dirPath);
+		FileFilter fileFilter = new WildcardFileFilter("*." + "xlsx");
+		File[] files = dir.listFiles(fileFilter);
 
-		    return getLatestFilefromDir;
-		    
-	/*	File dir = new File(dirPath);
-		File[] files = dir.listFiles();
-		if (files == null || files.length == 0) {
-			return null;
+		if (files.length > 0) {
+			/** The newest file comes first **/
+			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+			getLatestFilefromDir = files[0];
 		}
 
-		File lastModifiedFile = files[0];
-		for (int i = 1; i < files.length; i++) {
-			if (lastModifiedFile.lastModified() < files[i].lastModified()) {
-				lastModifiedFile = files[i];
-			}
-		}
-		return lastModifiedFile;*/
+		return getLatestFilefromDir;
+
+		/*
+		 * File dir = new File(dirPath); File[] files = dir.listFiles(); if (files ==
+		 * null || files.length == 0) { return null; }
+		 * 
+		 * File lastModifiedFile = files[0]; for (int i = 1; i < files.length; i++) { if
+		 * (lastModifiedFile.lastModified() < files[i].lastModified()) {
+		 * lastModifiedFile = files[i]; } } return lastModifiedFile;
+		 */
 	}
+
 	public static File getLatestFilefromDirCsv(String dirPath) {
-		
-		  File getLatestFilefromDir = null;
-		    File dir = new File(dirPath);
-		    FileFilter fileFilter = new WildcardFileFilter("*." + "csv");
-		    File[] files = dir.listFiles(fileFilter);
 
-		    if (files.length > 0) {
-		        /** The newest file comes first **/
-		        Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
-		        getLatestFilefromDir = files[0];
-		    }
+		File getLatestFilefromDir = null;
+		File dir = new File(dirPath);
+		FileFilter fileFilter = new WildcardFileFilter("*." + "csv");
+		File[] files = dir.listFiles(fileFilter);
 
-		    return getLatestFilefromDir;
-		    
+		if (files.length > 0) {
+			/** The newest file comes first **/
+			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+			getLatestFilefromDir = files[0];
+		}
+
+		return getLatestFilefromDir;
+
 	}
+
 	public static void DownloadOG(Robot robot, WebDriver driver) {
 		try {
 			robot = new Robot();
@@ -196,24 +193,50 @@ public class RandomAction {
 		System.out.println("All files deleted from folder :-" + path);
 
 	}
-	
-	public static WebDriver openBrowser(String browser, String path){
+
+	public static WebDriver openBrowser(String browser, String path) {
 		if (browser.equalsIgnoreCase("ie")) {
 			System.setProperty("webdriver.ie.driver",
-					System.getProperty("user.dir")+"\\Downloads\\chromedriver_win32\\ie.exe");
+					System.getProperty("user.dir") + "\\Downloads\\chromedriver_win32\\ie.exe");
 			driver = new InternetExplorerDriver();
-			}
-		else if (browser.equalsIgnoreCase("ff")) {
+		} else if (browser.equalsIgnoreCase("ff")) {
 			driver = new FirefoxDriver();
-		}
-		else {
+		} else if (browser.equalsIgnoreCase("gecko")) {
+			System.setProperty("webdriver.gecko.driver", path);
+			driver = new FirefoxDriver();
+			driver.manage().window().maximize();
+		} else {
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("start-maximized");
-			System.setProperty("webdriver.chrome.driver",
-					path);
+			System.setProperty("webdriver.chrome.driver", path);
 			driver = new ChromeDriver(options);
 		}
-		return driver;		
+		return driver;
 	}
 
+	public  static boolean isAlertPresent() {
+		try {
+			driver.switchTo().alert();
+			return true;
+		} // try
+		catch (NoAlertPresentException Ex) {
+			return false;
+		}
+	}
+
+	public static void acceptAlert() {
+		try {
+			driver.switchTo().alert().accept();
+		} catch (NoAlertPresentException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void dismissAlert() {
+		try {
+			driver.switchTo().alert().dismiss();
+		} catch (NoAlertPresentException e) {
+			e.printStackTrace();
+		}
+	}
 }

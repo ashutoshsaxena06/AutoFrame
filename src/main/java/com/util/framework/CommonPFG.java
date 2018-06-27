@@ -30,9 +30,9 @@ public class CommonPFG {
 	}
 
 	// username
-	@FindBy(xpath = "//input[@name='UserName']")
+	@FindBy(xpath = "//form/div/div/input[@name='UserName']")
 	WebElement txt_Username;
-	@FindBy(xpath = "//input[@name='Password']")
+	@FindBy(xpath = "//form/div/div/input[@name='Password']")
 	WebElement txt_Password;
 	@FindBy(xpath = "//button[@name='SubmitBtn']")
 	WebElement btn_SubmitBtn;
@@ -51,14 +51,16 @@ public class CommonPFG {
 	@FindBy(xpath = "//*[@id='wizardheader']")
 	WebElement popUp_SelectGuide;
 	// @FindBy(xpath="iframe = id= 'Custom-iFrame0')WebElement txt_Username;
-	@FindBy(xpath = "//*[@id='agemenuli-adv']/a/span[text()='Advanced']")
-	WebElement lnk_advanced;
-	@FindBy(xpath = "//*[@id='pagemenu-price']/a/span[text()='Display Prices']")
+	@FindBy(xpath = "//*[@id='pagemenuli-adv']/a") //form/table/*/*/*/*/*/tr[2]/*/*/*/*/a
+	WebElement lnk_advanced; 
+	@FindBy(xpath = "//*[@id='pagemenu-price']/a/span[contains(.,'Display Prices')]")
 	WebElement lnk_displayPrices;
 	@FindBy(xpath = "//*[@id='pagemenuli-export']/a/span[text()='Export']")
 	WebElement lnk_Export;
 	@FindBy(xpath = "//*[@id='pagemenu-export3']/a/span[contains(.,'Excel')]")
 	WebElement lnk_Excel;
+	@FindBy(xpath = "//*[@id='globalToolbar']/table/tbody/tr/td[2]/span[1]")
+	WebElement hdr_Text;
 	@FindBy(xpath = "//*[text()='Sign Off']")
 	WebElement txt_SignOff;
 
@@ -66,50 +68,95 @@ public class CommonPFG {
 		PageFactory.initElements(getDriver(), this);
 	}
 
-	public Boolean startPFG(String listname, String username, String password) throws InterruptedException {
+	// public Boolean startPFG(String listname, String username, String password)
+	// throws InterruptedException {
+	public static void main(String[] args) {
+		String listname = "History";
+		String username = "46084";
+		String password = "gilberts";
+		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
+		driver = RandomAction.openBrowser("chrome", path);
+		setDriver(driver);
 		com = new CommonPFG();
-		wait = new WebDriverWait(getDriver(), 30);
-
+		wait = new WebDriverWait(driver, 30);
 		try {
 			com.login(username, password);
 		} catch (Exception e) {
 			System.err.println("Login Failed ! ");
 			e.printStackTrace();
-			return false;
+			// return false;
 		}
 
 		try {
-			Thread.sleep(3000);
-
-			clickList(listname);
-
+			if (RandomAction.isAlertPresent()) {
+				RandomAction.acceptAlert();
+			}
 			Thread.sleep(5000);
+			
+//			do {
+				com.clickList(listname);
+//				Thread.sleep(5000);
+//				try {
+//					String header = com.lnk_advanced.getText();
+//					System.out.println(header);
+//					break;
+//				} catch (Exception e) {
+//					com.retry++;
+//					if (com.retry == maxtry) {
+//						System.out.println("Order guide not clicked .. ");
+//						throw new AutomationException("Order guide list not clicked .. ", 101);
+//					}
+//					System.out.println("retrying to click on OG .. ");
+//				}
+//			} while (com.retry < maxtry);
+
+			System.out.println("Order guide clicked ..");
 			// pop-up
-			downloadFile();
-			
-			return true;
-			
+			com.downloadFile();
+
+			// return true;
 		} catch (Exception e) {
 			System.err.println("Failed to download file");
 			e.printStackTrace();
-			return false;
+			// return false;
 		} finally {
 			try {
 				com.txt_SignOff.click();
-			} catch (Exception e2) {
+				if (RandomAction.isAlertPresent()) {
+					RandomAction.acceptAlert();
+				}
+			} catch (Exception e) {
 				System.err.println("not able to Logout successfully !");
+				e.printStackTrace();
 			}
 		}
 	}
 
 	private void downloadFile() {
 		Actions act = new Actions(driver);
-		act.moveToElement(lnk_advanced).moveToElement(lnk_displayPrices).click().build().perform();
-		act.moveToElement(lnk_advanced).moveToElement(lnk_Excel).click().build().perform();
+//		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
+//		lnk_advanced.click();
+//		wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
+//		lnk_displayPrices.click();
+		 act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+//		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
+//		lnk_advanced.click();
+//		wait.until(ExpectedConditions.elementToBeClickable(lnk_Export));
+//		lnk_Export.click();
+		act.moveToElement(lnk_advanced).moveToElement(lnk_Export).click(lnk_Excel).build().perform();
 	}
 
 	private void clickList(String listname) throws InterruptedException {
 		Actions act = new Actions(driver);
+		wait.until(ExpectedConditions.elementToBeClickable(lnk_Reports));
+		lnk_Reports.click();
+		wait.until(ExpectedConditions.elementToBeClickable(lnk_Guides));
+		lnk_Guides.click();
 		if (!listname.equalsIgnoreCase("History")) {
 			while (retry < maxtry) {
 				act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(txt_CustomGuides).build().perform();
@@ -147,6 +194,7 @@ public class CommonPFG {
 				break;
 			}
 		}
+
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		Thread.sleep(3000);
 		WebElement userName = wait.until(ExpectedConditions.visibilityOf(txt_Username));

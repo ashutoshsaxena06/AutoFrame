@@ -19,7 +19,6 @@ public class CommonUSFoods {
 	public static WebDriverWait wait;
 	public static String url = "https://www3.usfoods.com/order/faces/oracle/webcenter/portalapp/pages/login.jspx";
 	public static CommonUSFoods com;
-
 	public static WebDriver getDriver() {
 		return driver;
 	}
@@ -63,7 +62,7 @@ public class CommonUSFoods {
 	WebElement txt_FileName;
 
 	// Format
-	@FindBy(xpath = ".//*[@id='r1:0:pt1:r5:0:soc4']/..//div[(text()='CSV')]")
+	@FindBy(xpath = ".//*[@id='r1:0:pt1:r5:0:soc4']/..//div[(text()='PDF')]")
 	WebElement txt_Format;
 	
 	// Format

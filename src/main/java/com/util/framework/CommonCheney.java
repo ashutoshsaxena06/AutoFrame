@@ -52,7 +52,7 @@ public class CommonCheney {
 		Thread.sleep(2000);
 		// ordering
 		WebElement lnk_Ordering = wait
-				.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//a[contains(.,'Ordering')]"))));
+				.until(ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//a[contains(.,'Ordering')]"))));
 		lnk_Ordering.click();
 
 		Thread.sleep(2000);
@@ -243,15 +243,15 @@ public class CommonCheney {
 			driver.findElement(By.xpath("//a[contains(@id,'ExportGridButton')]/span/*")).click();
 			logger.info("Clicked - Export Grid");
 		} catch (NoSuchElementException e1) {
-			Thread.sleep(3000);
-			driver.findElement(By.xpath("//a[contains(@id,'ExportGridButton')]/span/*")).click();
-			logger.info("Clicked - Export Grid");
 			e1.printStackTrace();
-		} catch (WebDriverException e) {
 			Thread.sleep(3000);
 			driver.findElement(By.xpath("//a[contains(@id,'ExportGridButton')]/span/*")).click();
 			logger.info("Clicked - Export Grid");
+		} catch (WebDriverException e) {
 			e.printStackTrace();
+			Thread.sleep(3000);
+			driver.findElement(By.xpath("//a[contains(@id,'ExportGridButton')]/span/*")).click();
+			logger.info("Clicked - Export Grid");
 		}
 
 		Thread.sleep(1000);

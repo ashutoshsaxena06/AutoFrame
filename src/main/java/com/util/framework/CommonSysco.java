@@ -13,7 +13,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import com.util.framework.RandomAction;
 
-
 public class CommonSysco {
 
 	public static WebDriverWait wait;
@@ -110,11 +109,11 @@ public class CommonSysco {
 
 			WebElement chk_IncludePricing = driver.findElement(By.xpath("//input[@id='expIncludePricingCheckBox']"));
 			chk_IncludePricing.click();
-			logger.info("checked to Include Pricing");
+			logger.info("checked to Include Pricing - " + chk_IncludePricing.isSelected());
 
 			WebElement chk_IncludeStatus = driver.findElement(By.xpath("//input[@id='expIncludePSMSCheckBox']"));
 			chk_IncludeStatus.click();
-			logger.info("checked to Include Status");
+			logger.info("checked to Include Status - " + chk_IncludeStatus.isSelected());
 
 			WebElement btn_Export = wait.until(ExpectedConditions
 					.elementToBeClickable(driver.findElement(By.xpath("//div/button[contains(.,'Export')]"))));
@@ -132,7 +131,9 @@ public class CommonSysco {
 
 			WebElement inp_Close = wait.until(
 					ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//div/input[@id='close']"))));
+
 			inp_Close.click();
+
 			logger.info("Application closed");
 			return true;
 
@@ -202,7 +203,6 @@ public class CommonSysco {
 	public boolean startSysco(WebDriver driver, String AccountID, String listName, String userID, String pwd)
 			throws InterruptedException {
 
-
 		try {
 			driver.get("https://www.esysco.net/EOP/Login");
 			// Wait For Page To Load
@@ -242,7 +242,7 @@ public class CommonSysco {
 					.isDisplayed()) {
 				selectAccount(AccountID);
 			}
-			
+
 			// click List link
 			WebElement lnk_List = wait.until(ExpectedConditions
 					.elementToBeClickable(driver.findElement(By.xpath("//li/a[contains(@id,'listTab')]"))));
