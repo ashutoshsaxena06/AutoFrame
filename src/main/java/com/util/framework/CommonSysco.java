@@ -19,6 +19,7 @@ public class CommonSysco {
 	public static WebDriver driver;
 	private final static Logger logger = Logger.getLogger(CommonSysco.class);
 
+	/*
 	public Boolean startSysco(WebDriver driver, String listName, String userID, String pwd)
 			throws InterruptedException {
 
@@ -66,34 +67,15 @@ public class CommonSysco {
 
 			// Select list
 			WebElement lnk_OGname = wait.until(ExpectedConditions.elementToBeClickable(driver
-					.findElement(By.xpath("//*[@id='" + listName + "']/*/*[contains(text(),'" + listName + "')]"))));
+					.findElement(By.xpath("//*[@id='" + listName + "']/..//[contains(text(),'" + listName + "')]"))));
 			lnk_OGname.click();
 
-			// Choose List
-			// List<WebElement> OG_Lists
-			// =driver.findElements(By.xpath("//table[@id='sysRecomGrid']/*/tr"));
-			// logger.info("No. of Rows in My List :-" +
-			// OG_Lists.size());
-			//
-			// Thread.sleep(2000);
-			// // Select list
-			// for (WebElement List_Elements : OG_Lists) {
-			// // logger.info(List_Elements.getText());
-			// String OG_Element = List_Elements.getAttribute("id");
-			// logger.info(OG_Element);
-			// if (OG_Element.equalsIgnoreCase(listName)) {
-			// driver.findElement(By.xpath("//table[@id='sysRecomGrid']/*/*/td/a[contains(.,"+
-			// listName +")]")).click();
-			//
-			// }
-			//
-			// }
 
 			Thread.sleep(2000);
 
 			Select ddl_MoreTools = new Select(
 					wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("moreListToolsTop")))));
-			ddl_MoreTools.selectByVisibleText("Export List");
+			ddl_MoreTools.selectByValue("exportList");
 			logger.info("Selected export list Option from More Tools drop down");
 
 			Thread.sleep(2000);
@@ -108,8 +90,12 @@ public class CommonSysco {
 			logger.info("selected value for file type - 6");
 
 			WebElement chk_IncludePricing = driver.findElement(By.xpath("//input[@id='expIncludePricingCheckBox']"));
-			chk_IncludePricing.click();
-			logger.info("checked to Include Pricing - " + chk_IncludePricing.isSelected());
+			if (!chk_IncludePricing.isSelected()) {
+				chk_IncludePricing.click();
+				logger.info("checked to Include Pricing");
+			} else {
+				logger.info("Include Pricing already selected");
+			}
 
 			WebElement chk_IncludeStatus = driver.findElement(By.xpath("//input[@id='expIncludePSMSCheckBox']"));
 			chk_IncludeStatus.click();
@@ -123,8 +109,8 @@ public class CommonSysco {
 
 			Thread.sleep(80000);
 
-			WebElement lnk_Close = wait.until(ExpectedConditions
-					.elementToBeClickable(driver.findElement(By.xpath("//div/a[contains(.,'Close')]"))));
+			WebElement lnk_Close = wait.until(
+					ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//input[@id='close']"))));
 			lnk_Close.click();
 
 			Thread.sleep(2000);
@@ -149,8 +135,10 @@ public class CommonSysco {
 		 * finally {
 		 * 
 		 * }
-		 */
+
 	}
+	
+	*/
 
 	public static void loginSysco(WebDriver driver, String userName, String password) {
 
@@ -237,10 +225,14 @@ public class CommonSysco {
 
 			Thread.sleep(2000);
 
-			if (wait.until(
-					ExpectedConditions.visibilityOf(driver.findElement(By.xpath(".//*[@id='customer-select-popup']"))))
-					.isDisplayed()) {
-				selectAccount(AccountID);
+			if (!AccountID.isEmpty() && AccountID != null) {
+				if (wait.until(ExpectedConditions
+						.visibilityOf(driver.findElement(By.xpath(".//*[@id='customer-select-popup']"))))
+						.isDisplayed()) {
+					selectAccount(AccountID);
+				}
+			} else {
+				logger.info("No Account id is provided to select - " + AccountID);
 			}
 
 			// click List link
@@ -280,7 +272,7 @@ public class CommonSysco {
 
 			Select ddl_MoreTools = new Select(
 					wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("moreListToolsTop")))));
-			ddl_MoreTools.selectByVisibleText("Export List");
+			ddl_MoreTools.selectByValue("exportList");
 			logger.info("Selected export list Option from More Tools drop down");
 
 			Thread.sleep(2000);
@@ -298,13 +290,13 @@ public class CommonSysco {
 			if (!chk_IncludePricing.isSelected()) {
 				chk_IncludePricing.click();
 				logger.info("checked to Include Pricing");
-			}else {
+			} else {
 				logger.info("Include Pricing already selected");
 			}
 
 			WebElement chk_IncludeStatus = driver.findElement(By.xpath("//input[@id='expIncludePSMSCheckBox']"));
 			chk_IncludeStatus.click();
-			logger.info("checked to Include Status");
+			logger.info("checked to Include Status - " + chk_IncludeStatus.isSelected());
 
 			WebElement btn_Export = wait.until(ExpectedConditions
 					.elementToBeClickable(driver.findElement(By.xpath("//div/button[contains(.,'Export')]"))));
@@ -314,14 +306,15 @@ public class CommonSysco {
 
 			Thread.sleep(80000);
 
-			WebElement lnk_Close = wait.until(ExpectedConditions
-					.elementToBeClickable(driver.findElement(By.xpath("//div/a[contains(.,'Close')]"))));
+			WebElement lnk_Close = wait.until(
+					ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//div/a[@id='clsLink']"))));
 			lnk_Close.click();
 
 			Thread.sleep(2000);
 
 			WebElement inp_Close = wait.until(
 					ExpectedConditions.elementToBeClickable(driver.findElement(By.xpath("//div/input[@id='close']"))));
+
 			inp_Close.click();
 			logger.info("Application closed");
 			return true;
