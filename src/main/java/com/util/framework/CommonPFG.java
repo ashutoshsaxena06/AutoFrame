@@ -20,6 +20,7 @@ public class CommonPFG {
 	public static WebDriverWait wait;
 	public static String url = "https://eastern5.onlinefoodservice.com/pnet/eOrderServlet";
 	public static CommonPFG com;
+	public static Actions act;
 
 	public static WebDriver getDriver() {
 		return driver;
@@ -51,8 +52,8 @@ public class CommonPFG {
 	@FindBy(xpath = "//*[@id='wizardheader']")
 	WebElement popUp_SelectGuide;
 	// @FindBy(xpath="iframe = id= 'Custom-iFrame0')WebElement txt_Username;
-	@FindBy(xpath = "//*[@id='pagemenuli-adv']/a") //form/table/*/*/*/*/*/tr[2]/*/*/*/*/a
-	WebElement lnk_advanced; 
+	@FindBy(xpath = "//*[@id='pagemenuli-adv']/a") // form/table/*/*/*/*/*/tr[2]/*/*/*/*/a
+	WebElement lnk_advanced;
 	@FindBy(xpath = "//*[@id='pagemenu-price']/a/span[contains(.,'Display Prices')]")
 	WebElement lnk_displayPrices;
 	@FindBy(xpath = "//*[@id='pagemenuli-export']/a/span[text()='Export']")
@@ -61,19 +62,17 @@ public class CommonPFG {
 	WebElement lnk_Excel;
 	@FindBy(xpath = "//*[@id='globalToolbar']/table/tbody/tr/td[2]/span[1]")
 	WebElement hdr_Text;
-	@FindBy(xpath = "//*[text()='Sign Off']")
+	@FindBy(xpath = "//span[@class='globalButtonBar']/*[@title='Sign Off']")
 	WebElement txt_SignOff;
 
 	public CommonPFG() {
 		PageFactory.initElements(getDriver(), this);
 	}
 
-	// public Boolean startPFG(String listname, String username, String password)
-	// throws InterruptedException {
-	public static void main(String[] args) {
-		String listname = "History";
-		String username = "46084";
-		String password = "gilberts";
+	public Boolean startPFG(String listname, String username, String password) throws InterruptedException {
+//		String listname = "History";
+//		String username = "46084";
+//		String password = "gilberts";
 		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
 		driver = RandomAction.openBrowser("chrome", path);
 		setDriver(driver);
@@ -84,7 +83,7 @@ public class CommonPFG {
 		} catch (Exception e) {
 			System.err.println("Login Failed ! ");
 			e.printStackTrace();
-			// return false;
+			 return false;
 		}
 
 		try {
@@ -92,35 +91,37 @@ public class CommonPFG {
 				RandomAction.acceptAlert();
 			}
 			Thread.sleep(5000);
-			
-//			do {
-				com.clickList(listname);
-//				Thread.sleep(5000);
-//				try {
-//					String header = com.lnk_advanced.getText();
-//					System.out.println(header);
-//					break;
-//				} catch (Exception e) {
-//					com.retry++;
-//					if (com.retry == maxtry) {
-//						System.out.println("Order guide not clicked .. ");
-//						throw new AutomationException("Order guide list not clicked .. ", 101);
-//					}
-//					System.out.println("retrying to click on OG .. ");
-//				}
-//			} while (com.retry < maxtry);
+
+			// do {
+			com.clickList(listname);
+			// Thread.sleep(5000);
+			// try {
+			// String header = com.lnk_advanced.getText();
+			// System.out.println(header);
+			// break;
+			// } catch (Exception e) {
+			// com.retry++;
+			// if (com.retry == maxtry) {
+			// System.out.println("Order guide not clicked .. ");
+			// throw new AutomationException("Order guide list not clicked .. ", 101);
+			// }
+			// System.out.println("retrying to click on OG .. ");
+			// }
+			// } while (com.retry < maxtry);
 
 			System.out.println("Order guide clicked ..");
 			// pop-up
 			com.downloadFile();
 
-			// return true;
+			 return true;
 		} catch (Exception e) {
 			System.err.println("Failed to download file");
 			e.printStackTrace();
-			// return false;
+			 return false;
 		} finally {
 			try {
+				driver.switchTo().defaultContent();
+				act.moveToElement(com.txt_SignOff);
 				com.txt_SignOff.click();
 				if (RandomAction.isAlertPresent()) {
 					RandomAction.acceptAlert();
@@ -133,26 +134,27 @@ public class CommonPFG {
 	}
 
 	private void downloadFile() {
-		Actions act = new Actions(driver);
-//		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
-//		lnk_advanced.click();
-//		wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
-//		lnk_displayPrices.click();
-		 act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
+		act = new Actions(driver);
+		// wait.until(ExpectedConditions.visibilityOf(lnk_advanced));
+		driver.switchTo().frame("ContentFrame");
+		lnk_advanced.click();
+		// wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
+		// lnk_displayPrices.click();
+		act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-//		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
-//		lnk_advanced.click();
-//		wait.until(ExpectedConditions.elementToBeClickable(lnk_Export));
-//		lnk_Export.click();
+		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
+		lnk_advanced.click();
+		// wait.until(ExpectedConditions.elementToBeClickable(lnk_Export));
+		// lnk_Export.click();
 		act.moveToElement(lnk_advanced).moveToElement(lnk_Export).click(lnk_Excel).build().perform();
 	}
 
 	private void clickList(String listname) throws InterruptedException {
-		Actions act = new Actions(driver);
+		act = new Actions(driver);
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_Reports));
 		lnk_Reports.click();
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_Guides));

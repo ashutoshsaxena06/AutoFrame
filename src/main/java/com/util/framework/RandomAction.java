@@ -138,6 +138,31 @@ public class RandomAction {
 		 */
 	}
 
+	public static File getLatestFilefromDirPDF(String dirPath) {
+
+		File getLatestFilefromDir = null;
+		File dir = new File(dirPath);
+		FileFilter fileFilter = new WildcardFileFilter("*." + "pdf");
+		File[] files = dir.listFiles(fileFilter);
+
+		if (files.length > 0) {
+			/** The newest file comes first **/
+			Arrays.sort(files, LastModifiedFileComparator.LASTMODIFIED_REVERSE);
+			getLatestFilefromDir = files[0];
+		}
+
+		return getLatestFilefromDir;
+
+		/*
+		 * File dir = new File(dirPath); File[] files = dir.listFiles(); if (files ==
+		 * null || files.length == 0) { return null; }
+		 * 
+		 * File lastModifiedFile = files[0]; for (int i = 1; i < files.length; i++) { if
+		 * (lastModifiedFile.lastModified() < files[i].lastModified()) {
+		 * lastModifiedFile = files[i]; } } return lastModifiedFile;
+		 */
+	}
+
 	public static File getLatestFilefromDirCsv(String dirPath) {
 
 		File getLatestFilefromDir = null;
@@ -214,7 +239,7 @@ public class RandomAction {
 		return driver;
 	}
 
-	public  static boolean isAlertPresent() {
+	public static boolean isAlertPresent() {
 		try {
 			driver.switchTo().alert();
 			return true;

@@ -299,7 +299,7 @@ public class CommonGFS {
 		// TODO Auto-generated method stub
 		// logger.info("The account name appear on system is
 		// -"+driver.findElement(By.xpath("")).getText());
-		driver.findElement(By.xpath("//span[contains(text(),'" + AcName + "')]")).click();
+		driver.findElement(By.xpath("//span[@class='accountName ng-binding'][contains(.,'" + AcName + "')]")).click();
 		logger.info(AcName + " is selected");
 	}
 
@@ -313,7 +313,7 @@ public class CommonGFS {
 
 		// clicking on 10 key link
 		driver.findElement(By.xpath("//a/div[contains(.,'10 key/import')]")).click();
-		// driver.findElement(By.xpath("//a[contains(@focus-parent-id,'16')]")).click();
+		// driver.findElement(By.xpath("//a[contains(@focus-parent-id,'16')]")).click();+
 
 		driver.findElement(By.xpath("/html/body/div[3]/div/div[6]/div/div[3]/a[4]")).click();
 

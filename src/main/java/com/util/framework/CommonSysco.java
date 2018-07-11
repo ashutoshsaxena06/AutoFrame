@@ -295,8 +295,12 @@ public class CommonSysco {
 			logger.info("selected value for file type - 6");
 
 			WebElement chk_IncludePricing = driver.findElement(By.xpath("//input[@id='expIncludePricingCheckBox']"));
-			chk_IncludePricing.click();
-			logger.info("checked to Include Pricing");
+			if (!chk_IncludePricing.isSelected()) {
+				chk_IncludePricing.click();
+				logger.info("checked to Include Pricing");
+			}else {
+				logger.info("Include Pricing already selected");
+			}
 
 			WebElement chk_IncludeStatus = driver.findElement(By.xpath("//input[@id='expIncludePSMSCheckBox']"));
 			chk_IncludeStatus.click();
