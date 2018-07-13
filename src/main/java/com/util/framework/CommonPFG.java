@@ -22,12 +22,12 @@ public class CommonPFG {
 	public static CommonPFG com;
 	public static Actions act;
 
-	public static WebDriver getDriver() {
-		return driver;
+	public WebDriver getDriver() {
+		return this.driver;
 	}
 
-	public static void setDriver(WebDriver driver) {
-		CommonUSFoods.driver = driver;
+	public void setDriver(WebDriver driver) {
+		this.driver = driver;
 	}
 
 	// username
@@ -123,7 +123,7 @@ public class CommonPFG {
 			 return false;
 		} finally {
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(20000);
 				act.release();
 				act.moveToElement(com.txt_SignOff);
 				com.txt_SignOff.click();
@@ -140,18 +140,18 @@ public class CommonPFG {
 	private void downloadFile() throws InterruptedException {
 		act = new Actions(driver);
 		driver.switchTo().frame("ContentFrame");
-		lnk_advanced.click();
+//		lnk_advanced.click();
 		// wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
 		// lnk_displayPrices.click();
 		act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
 		System.out.println("Clicked on display prices");
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(20000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
-		lnk_advanced.click();
+//		lnk_advanced.click();
 		// wait.until(ExpectedConditions.elementToBeClickable(lnk_Export));
 		// lnk_Export.click();
 		act.moveToElement(lnk_advanced).moveToElement(lnk_Export).click(lnk_Excel).build().perform();
@@ -177,6 +177,7 @@ public class CommonPFG {
 			OG.click();
 		} else {
 			act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(lnk_History).build().perform();
+			System.out.println("");		
 		}
 
 	}
