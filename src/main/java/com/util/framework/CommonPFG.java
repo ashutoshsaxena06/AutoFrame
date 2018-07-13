@@ -49,7 +49,7 @@ public class CommonPFG {
 	WebElement a_BidsOptions;
 	@FindBy(xpath = "//*[@id='mainmenu-report0502']/a/span[text()='Custom Guides']")
 	WebElement txt_CustomGuides;
-	@FindBy(xpath = "//*[@id='wizardheader']")
+	@FindBy(xpath = "//iframe[@class='bigrounded']")
 	WebElement popUp_SelectGuide;
 	// @FindBy(xpath="iframe = id= 'Custom-iFrame0')WebElement txt_Username;
 	@FindBy(xpath = "//*[@id='pagemenuli-adv']/a") // form/table/*/*/*/*/*/tr[2]/*/*/*/*/a
@@ -70,16 +70,18 @@ public class CommonPFG {
 	}
 
 	public Boolean startPFG(String listname, String username, String password) throws InterruptedException {
-//		String listname = "History";
+//	public static void main(String[] args) {
+//		String listname = "OG030118";
 //		String username = "46084";
 //		String password = "gilberts";
-		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
-		driver = RandomAction.openBrowser("chrome", path);
-		setDriver(driver);
+//		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
+//		driver = RandomAction.openBrowser("chrome", path);
+//		setDriver(driver);
 		com = new CommonPFG();
 		wait = new WebDriverWait(driver, 30);
 		try {
 			com.login(username, password);
+			System.out.println("Login success !");
 		} catch (Exception e) {
 			System.err.println("Login Failed ! ");
 			e.printStackTrace();
@@ -111,6 +113,7 @@ public class CommonPFG {
 
 			System.out.println("Order guide clicked ..");
 			// pop-up
+			Thread.sleep(5000);
 			com.downloadFile();
 
 			 return true;
@@ -120,7 +123,8 @@ public class CommonPFG {
 			 return false;
 		} finally {
 			try {
-				driver.switchTo().defaultContent();
+				Thread.sleep(5000);
+				act.release();
 				act.moveToElement(com.txt_SignOff);
 				com.txt_SignOff.click();
 				if (RandomAction.isAlertPresent()) {
@@ -133,14 +137,14 @@ public class CommonPFG {
 		}
 	}
 
-	private void downloadFile() {
+	private void downloadFile() throws InterruptedException {
 		act = new Actions(driver);
-		// wait.until(ExpectedConditions.visibilityOf(lnk_advanced));
 		driver.switchTo().frame("ContentFrame");
 		lnk_advanced.click();
 		// wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
 		// lnk_displayPrices.click();
 		act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
+		System.out.println("Clicked on display prices");
 		try {
 			Thread.sleep(5000);
 		} catch (InterruptedException e) {
@@ -162,14 +166,15 @@ public class CommonPFG {
 		if (!listname.equalsIgnoreCase("History")) {
 			while (retry < maxtry) {
 				act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(txt_CustomGuides).build().perform();
-				Thread.sleep(3000);
+				Thread.sleep(2000);
 				if (checkPopUpDisplay()) {
 					break;
 				}
 			}
-			WebElement OG = OGelement(listname);
-			OG.click();
+			WebElement OG = driver.findElement(By.xpath("//form[@name='ItemCopy']/..//td/a[contains(.,'"+ listname +"')]"));
+//			WebElement OG = OGelement(listname);
 			System.out.println("selected Order guide .. " + OG.getText());
+			OG.click();
 		} else {
 			act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(lnk_History).build().perform();
 		}
@@ -179,6 +184,10 @@ public class CommonPFG {
 	private boolean checkPopUpDisplay() {
 		try {
 			popUp_SelectGuide.isDisplayed();
+			driver.switchTo().frame(1);
+			System.out.println("switched to frame 1");
+			driver.switchTo().frame("Custom-iFrame0");
+			System.out.println("Switched to content frame");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

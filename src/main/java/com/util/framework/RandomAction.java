@@ -264,4 +264,34 @@ public class RandomAction {
 			e.printStackTrace();
 		}
 	}
+	
+	public static boolean isIframePresent(WebDriver driver) throws InterruptedException {
+		//
+		// driver.findElement(By.xpath("//html/body/table/tbody/tr[2]/td[1]/div/div[2]/table/tbody/tr[1]/td/input")).click();
+		Thread.sleep(3000);
+		// List to get & store frame
+		List<WebElement> ele = driver.findElements(By.tagName("iframe"));
+		System.out.println("Number of frames in a page :" + ele.size()); // ele.size
+																			// -
+																			// size
+																			// of
+																			// frame
+																			// list
+
+		if (ele.size() == 0) {
+			System.out.println("No frames on this page");
+			return false; // No frames
+		} else {
+			System.out.println("Frames present on this page, Below are the details -");
+
+			for (WebElement el : ele) {
+				// Returns the Id of a frame
+				System.out.println("Frame Id :" + el.getAttribute("id"));
+				// Returns the Name of a frame.
+				System.out.println("Frame name :" + el.getAttribute("name"));
+			}
+			return true; // frames present
+		}
+
+	}
 }

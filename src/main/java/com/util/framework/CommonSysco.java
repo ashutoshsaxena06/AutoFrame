@@ -225,7 +225,7 @@ public class CommonSysco {
 
 			Thread.sleep(2000);
 
-			if (!AccountID.isEmpty() && AccountID != null) {
+			if (AccountID != null) {
 				if (wait.until(ExpectedConditions
 						.visibilityOf(driver.findElement(By.xpath(".//*[@id='customer-select-popup']"))))
 						.isDisplayed()) {
