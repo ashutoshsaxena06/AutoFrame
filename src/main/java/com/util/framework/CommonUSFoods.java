@@ -109,7 +109,7 @@ public class CommonUSFoods {
 	WebElement btn_SignOut;
 
 	public CommonUSFoods() {
-		PageFactory.initElements(getDriver(), this);
+		PageFactory.initElements(driver, this);
 	}
 
 	public Boolean startUSF(String listname, String account, String username, String password)
@@ -117,7 +117,7 @@ public class CommonUSFoods {
 		// driver = RandomAction.openBrowser("Chrome",
 		// "C:\\Users\\my\\Downloads\\chromedriver_win32_new\\chromedriver.exe");
 		com = new CommonUSFoods();
-		wait = new WebDriverWait(getDriver(), 30);
+		wait = new WebDriverWait(driver, 30);
 
 		try {
 			com.login(username, password);
@@ -158,6 +158,8 @@ public class CommonUSFoods {
 	}
 
 	public void changeAccount(String account) {
+		wait = new WebDriverWait(driver, 30);
+
 		wait.until(ExpectedConditions.visibilityOf(lnk_accountName));
 		String currentAccountName = lnk_accountName.getText();
 		if (!currentAccountName.contains(account)) {
@@ -168,6 +170,8 @@ public class CommonUSFoods {
 	}
 
 	public void login(String username, String password) throws InterruptedException {
+		wait = new WebDriverWait(driver, 30);
+
 		driver.get(url);
 		while (retry < maxtry) {
 			if (!driver.getCurrentUrl().contains("www3.usfoods.com")) {
@@ -187,6 +191,8 @@ public class CommonUSFoods {
 	}
 
 	public void clickList(String listname) throws InterruptedException {
+		wait = new WebDriverWait(driver, 30);
+
 		Actions act = new Actions(driver);
 		// WebElement listIcon =
 		// wait.until(ExpectedConditions.visibilityOf(com.li_ListIcon));
@@ -211,6 +217,8 @@ public class CommonUSFoods {
 	}
 
 	public void downloadFile(String filename) {
+		wait = new WebDriverWait(driver, 30);
+
 		WebElement In_filename = wait.until(ExpectedConditions.visibilityOf(com.txt_FileName));
 		In_filename.sendKeys(filename);
 		if (!wait.until(ExpectedConditions.visibilityOf(com.txt_Format)).getText().equalsIgnoreCase("PDF")) {
@@ -221,6 +229,8 @@ public class CommonUSFoods {
 	}
 
 	public void chooseAccount(String account) {
+		wait = new WebDriverWait(driver, 30);
+
 		WebElement accountSelect = wait.until(ExpectedConditions.elementToBeClickable(
 				(By.xpath("//div[@id='dgfSPT:pt_pgl117']/div/ .. //span[contains(.,'" + account + "')]"))));
 		accountSelect.click();

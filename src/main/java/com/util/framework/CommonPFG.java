@@ -70,13 +70,14 @@ public class CommonPFG {
 	}
 
 	public Boolean startPFG(String listname, String username, String password) throws InterruptedException {
-//	public static void main(String[] args) {
-//		String listname = "OG030118";
-//		String username = "46084";
-//		String password = "gilberts";
-//		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
-//		driver = RandomAction.openBrowser("chrome", path);
-//		setDriver(driver);
+		// public static void main(String[] args) {
+		// String listname = "OG030118";
+		// String username = "46084";
+		// String password = "gilberts";
+		// String path = System.getProperty("user.home") +
+		// "\\Downloads\\chromedriver_win32\\chromedriver.exe";
+		// driver = RandomAction.openBrowser("chrome", path);
+		// setDriver(driver);
 		com = new CommonPFG();
 		wait = new WebDriverWait(driver, 30);
 		try {
@@ -85,7 +86,7 @@ public class CommonPFG {
 		} catch (Exception e) {
 			System.err.println("Login Failed ! ");
 			e.printStackTrace();
-			 return false;
+			return false;
 		}
 
 		try {
@@ -116,44 +117,49 @@ public class CommonPFG {
 			Thread.sleep(5000);
 			com.downloadFile();
 
-			 return true;
+			return true;
 		} catch (Exception e) {
 			System.err.println("Failed to download file");
 			e.printStackTrace();
-			 return false;
+			return false;
 		} finally {
-			try {
-				Thread.sleep(20000);
-				act.release();
-				act.moveToElement(com.txt_SignOff);
-				com.txt_SignOff.click();
-				if (RandomAction.isAlertPresent()) {
-					RandomAction.acceptAlert();
-				}
-			} catch (Exception e) {
-				System.err.println("not able to Logout successfully !");
-				e.printStackTrace();
-			}
+			// try {
+			// Thread.sleep(20000);
+			// act.release();
+			// act.moveToElement(com.txt_SignOff);
+			// com.txt_SignOff.click();
+			// if (RandomAction.isAlertPresent()) {
+			// RandomAction.acceptAlert();
+			// }
+			// } catch (Exception e) {
+			// System.err.println("not able to Logout successfully !");
+			// e.printStackTrace();
+			// }
+			System.out.println("Finally executed");
 		}
 	}
 
 	private void downloadFile() throws InterruptedException {
 		act = new Actions(driver);
+		Thread.sleep(5000);
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[@id='ContentFrame']"))));
 		driver.switchTo().frame("ContentFrame");
-//		lnk_advanced.click();
-		// wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
-		// lnk_displayPrices.click();
-		act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
+        Thread.sleep(3000);
+		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
+		lnk_advanced.click();
+		wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
+		lnk_displayPrices.click();
+		// act.moveToElement(lnk_advanced).click(lnk_displayPrices).build().perform();
 		System.out.println("Clicked on display prices");
 		try {
-			Thread.sleep(20000);
+			Thread.sleep(15000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
-//		lnk_advanced.click();
-		// wait.until(ExpectedConditions.elementToBeClickable(lnk_Export));
-		// lnk_Export.click();
+		lnk_advanced.click();
+		wait.until(ExpectedConditions.elementToBeClickable(lnk_Export));
+		lnk_Export.click();
 		act.moveToElement(lnk_advanced).moveToElement(lnk_Export).click(lnk_Excel).build().perform();
 	}
 
@@ -171,13 +177,14 @@ public class CommonPFG {
 					break;
 				}
 			}
-			WebElement OG = driver.findElement(By.xpath("//form[@name='ItemCopy']/..//td/a[contains(.,'"+ listname +"')]"));
-//			WebElement OG = OGelement(listname);
+			WebElement OG = driver
+					.findElement(By.xpath("//form[@name='ItemCopy']/..//td/a[contains(.,'" + listname + "')]"));
+			// WebElement OG = OGelement(listname);
 			System.out.println("selected Order guide .. " + OG.getText());
 			OG.click();
 		} else {
 			act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(lnk_History).build().perform();
-			System.out.println("");		
+			System.out.println("");
 		}
 
 	}
