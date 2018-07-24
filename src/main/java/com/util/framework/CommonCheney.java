@@ -113,6 +113,7 @@ public class CommonCheney {
 			if (removeColumns() == true) {
 				break;
 			}
+			retry++;
 		}
 		List<WebElement> OG_Col = driver.findElements(By.xpath("//ul[@id='Sortable']/*"));
 		System.out.println(OG_Col.size());
@@ -230,6 +231,7 @@ public class CommonCheney {
 			if (removeColumns() == true) {
 				break;
 			}
+			retry++;
 		}
 		List<WebElement> OG_Col = driver.findElements(By.xpath("//ul[@id='Sortable']/*"));
 		System.out.println(OG_Col.size());
@@ -284,10 +286,14 @@ public class CommonCheney {
 
 			System.out.println("removeColumns - " + removeColumns.size() + " and OG_Col -" + OG_Col.size());
 
-			if (OG_Col.size() != 7) {
+			if (OG_Col.size() < 7) {
 				System.out.println("OG_Col.size - " + OG_Col.size());
 				addHiddenColumns();
+			} else if (OG_Col.size() > 7) {
+				System.out.println("OG_Col.size - " + OG_Col.size());
 				return false;
+			} else {
+				System.out.println("OG_Col.size - " + OG_Col.size());
 			}
 
 			for (String column : removeColumns) {
@@ -319,6 +325,8 @@ public class CommonCheney {
 
 	private void addHiddenColumns() {
 		try {
+			Thread.sleep(3000);
+			ArrayList<String> addColumns = new ArrayList<String>();
 			List<WebElement> OG_Col = driver.findElements(By.xpath("//table[@id='HiddenColumnsTable']/..//img"));
 			System.out.println(OG_Col.size());
 			String Col_id;
@@ -335,12 +343,26 @@ public class CommonCheney {
 						|| Col_id.equals("CatalogProductStatus") || Col_id.equalsIgnoreCase("ProductStatus")
 						|| Col_id.equalsIgnoreCase("CasePrice")) {
 					System.out.println("Added Column from Hidden column :- " + Col_id);
-					element.click();
+					addColumns.add(Col_id);
+					iterator.remove();
 				} else {
 					System.out.println("Column not matched - " + Col_id);
 				}
 			}
-		} catch (InterruptedException e) {
+			System.out.println("removeColumns - " + addColumns.size() + " and OG_Col -" + OG_Col.size());
+
+			for (String column : addColumns) {
+				WebElement lnk_column = wait.until(ExpectedConditions.elementToBeClickable(driver
+						.findElement(By.xpath("//table[@id='HiddenColumnsTable']/..//img[@id='" + column + "']"))));// remove
+				// column
+				lnk_column.click();
+				Thread.sleep(3000);
+				System.out.println("Added column :- " + column);
+			}
+		} catch (StaleElementReferenceException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
