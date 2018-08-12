@@ -60,16 +60,13 @@ public class CommonUSFoods {
 	}
 
 	public void setOptions(String OGName) {
-		WebElement OrderGuide = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(.,'" + OGName
+		WebElement Options = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(.,'" + OGName
 				+ "')]/ancestor::td[2]/following-sibling::td/..//a[contains(.,'Options')]")));
-		// By.xpath("//div[@class='x2ml dropDownMenu-UtilityMenu
-		// x1a']/*/*/*/a[contains(.,'" + OGName + "')]"))); //
-		// div[@id='r1:0:pt1:pt_i3:0:pt_sfm1:pt_pgl44']
-		CommonUSFoods.OrderGuide = OrderGuide;
+		CommonUSFoods.Options = Options;
 	}
 
 	// download
-	@FindBy(xpath = ".//*[@id='r1:0:pt1:cil4']/span")
+	@FindBy(xpath = "//form[@id='f1']/..//a[@id='r1:0:pt1:cil4']")
 	WebElement lnk_Download;
 	// Download icon
 	@FindBy(xpath = "//td/*[@id='r1:0:pt1:cil15']/img")
@@ -89,7 +86,7 @@ public class CommonUSFoods {
 	WebElement txt_FileName;
 
 	// Format
-	@FindBy(xpath = ".//*[@id='r1:0:pt1:r3:0:soc4']/..//div[(text()='PDF')]")
+	@FindBy(xpath = ".//*[@id='r1:0:pt1:r3:0:soc4']/div")
 	WebElement txt_Format;
 
 	// Format
@@ -105,7 +102,7 @@ public class CommonUSFoods {
 	WebElement lnk_FormatSelectPDF;
 
 	// format to CSV
-	@FindBy(id = "dgfSPT:pt_cl21")
+	@FindBy(id = "r1:0:pt1:pt_cl21")
 	WebElement btn_SignOut;
 
 	public CommonUSFoods() {
@@ -130,7 +127,7 @@ public class CommonUSFoods {
 		try {
 			Thread.sleep(3000);
 
-			if (!account.isEmpty() && account != null) {
+			if (account != null) {
 				changeAccount(account);
 			} else {
 				System.out.println("account change not required");
@@ -194,15 +191,14 @@ public class CommonUSFoods {
 		wait = new WebDriverWait(driver, 30);
 
 		Actions act = new Actions(driver);
-		// WebElement listIcon =
-		// wait.until(ExpectedConditions.visibilityOf(com.li_ListIcon));
-		// act.moveToElement(listIcon).build().perform();
+
 		driver.get(listUrl);
 		com.setOrderGuide(listname);
 		if (CommonUSFoods.OrderGuide.getText().equalsIgnoreCase(listname)) {
 			setOptions(listname);
 			Options.click();
-			act.moveToElement(lnk_Download).click();
+			Thread.sleep(2000);
+			com.lnk_Download.click();
 		} else {
 			System.out.println("OrderGuide name not found on list download page");
 		}
@@ -220,6 +216,7 @@ public class CommonUSFoods {
 		wait = new WebDriverWait(driver, 30);
 
 		WebElement In_filename = wait.until(ExpectedConditions.visibilityOf(com.txt_FileName));
+		In_filename.clear();
 		In_filename.sendKeys(filename);
 		if (!wait.until(ExpectedConditions.visibilityOf(com.txt_Format)).getText().equalsIgnoreCase("PDF")) {
 			wait.until(ExpectedConditions.visibilityOf(com.lnk_FormatSelectIcon)).click();

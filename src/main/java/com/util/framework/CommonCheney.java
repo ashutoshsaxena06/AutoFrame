@@ -192,8 +192,9 @@ public class CommonCheney {
 
 		}
 
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		driver.findElement(By.xpath("//td[2]/a[contains(.,'" + OGName + "')]")).click();
+		System.out.println("custom guide selected");
 
 		// Thread.sleep(2000);
 		// Export grid button to show list

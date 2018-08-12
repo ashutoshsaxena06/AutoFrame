@@ -228,7 +228,7 @@ public class SendMailSSL {
 			// get connection
 			Session session = createConnection();
 			// String filepath = RandomAction.setdownloadDir();
-			File GFS_OG = RandomAction.getLatestFilefromDirxlsx(System.getProperty("user.home")+"\\Downloads\\");
+			File GFS_OG = RandomAction.getLatestFilefromDirPDF(System.getProperty("user.home")+"\\Downloads\\");
 			String filename = GFS_OG.getAbsolutePath();
 			System.out.println(filename);
 
