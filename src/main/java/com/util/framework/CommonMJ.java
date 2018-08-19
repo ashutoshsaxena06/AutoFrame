@@ -180,6 +180,12 @@ public class CommonMJ {
 	}
 
 	public void login(String username, String password) throws InterruptedException {
+		if (username.contains(".0")) {
+			username = username.substring(0,username.indexOf('.'));
+		}
+		if (password.contains(".0")) {
+			password = password.substring(0,password.indexOf('.'));
+		}
 		driver.get(url);
 		while (retry < maxtry) {
 			if (!driver.getCurrentUrl().contains("http://ps.mjkellner.com")) {

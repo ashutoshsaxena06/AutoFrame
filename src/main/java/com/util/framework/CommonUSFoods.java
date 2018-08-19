@@ -3,6 +3,7 @@ package com.util.framework;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -132,7 +133,8 @@ public class CommonUSFoods {
 			} else {
 				System.out.println("account change not required");
 			}
-
+			
+			Thread.sleep(3000);
 			clickList(listname);
 
 			Thread.sleep(5000);
@@ -146,6 +148,7 @@ public class CommonUSFoods {
 			return false;
 		} finally {
 			try {
+				Thread.sleep(8000);
 				com.btn_SignOut.click();
 			} catch (Exception e2) {
 				System.out.println("not able to Logout successfully !");
@@ -155,10 +158,10 @@ public class CommonUSFoods {
 	}
 
 	public void changeAccount(String account) {
-		wait = new WebDriverWait(driver, 30);
+//		wait = new WebDriverWait(driver, 30);
 
-		wait.until(ExpectedConditions.visibilityOf(lnk_accountName));
-		String currentAccountName = lnk_accountName.getText();
+		wait.until(ExpectedConditions.visibilityOf(com.lnk_accountName));
+		String currentAccountName = com.lnk_accountName.getText();
 		if (!currentAccountName.contains(account)) {
 			chooseAccount(account);
 		} else {
@@ -188,13 +191,14 @@ public class CommonUSFoods {
 	}
 
 	public void clickList(String listname) throws InterruptedException {
-		wait = new WebDriverWait(driver, 30);
+//		wait = new WebDriverWait(driver, 30);
 
 		Actions act = new Actions(driver);
-
 		driver.get(listUrl);
 		com.setOrderGuide(listname);
-		if (CommonUSFoods.OrderGuide.getText().equalsIgnoreCase(listname)) {
+		if (OrderGuide.getText().equalsIgnoreCase(listname)) {
+			JavascriptExecutor je = (JavascriptExecutor) driver;			 
+			je.executeScript("arguments[0].scrollIntoView(true);",OrderGuide);
 			setOptions(listname);
 			Options.click();
 			Thread.sleep(2000);
@@ -226,8 +230,8 @@ public class CommonUSFoods {
 	}
 
 	public void chooseAccount(String account) {
-		wait = new WebDriverWait(driver, 30);
-
+//		wait = new WebDriverWait(driver, 30);
+		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.id("dgfSPT:pt_cil4::icon")))).click();
 		WebElement accountSelect = wait.until(ExpectedConditions.elementToBeClickable(
 				(By.xpath("//div[@id='dgfSPT:pt_pgl117']/div/ .. //span[contains(.,'" + account + "')]"))));
 		accountSelect.click();

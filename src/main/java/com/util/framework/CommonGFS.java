@@ -274,7 +274,9 @@ public class CommonGFS {
 		btn_downArrowOrderGuideSelection.click();
 
 		driver.findElement(By.xpath("//a[contains(.,'Print/Export List')]")).click();
-		DialogWinExportOG(driver);
+		DialogWinExportOG
+		
+		(driver);
 
 		Thread.sleep(3000);
 		return true;
