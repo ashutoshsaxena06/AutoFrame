@@ -18,7 +18,7 @@ public class CommonKohl {
 	public static WebElement OrderGuide;
 	public static WebDriver driver;
 	public static WebDriverWait wait;
-	public static String url = "https://eastern5.onlinefoodservice.com/pnet/eOrderServlet";
+	public static String url = "http://powernet.kohlwholesale.com/pnet/eOrder";
 	public static CommonKohl com;
 	public static Actions act;
 
@@ -31,11 +31,11 @@ public class CommonKohl {
 	}
 
 	// username
-	@FindBy(xpath = "//form/div/div/input[@name='UserName']")
+	@FindBy(xpath = "//input[@name='UserName']")
 	WebElement txt_Username;
-	@FindBy(xpath = "//form/div/div/input[@name='Password']")
+	@FindBy(xpath = "//input[@name='Password']")
 	WebElement txt_Password;
-	@FindBy(xpath = "//button[@name='SubmitBtn']")
+	@FindBy(xpath = "//input[@name='SubmitBtn']")
 	WebElement btn_SubmitBtn;
 	@FindBy(xpath = "//*[@id='mainmenuli-report']/a/span[text()='Reports']")
 	WebElement lnk_Reports;
@@ -45,7 +45,7 @@ public class CommonKohl {
 	WebElement lnk_History;
 	@FindBy(xpath = "//*[@id='mainmenuli-reportBids']/a/span[text()='Bids']")
 	WebElement lnk_Bids;
-	@FindBy(xpath = "//*[@id='mainmenu-Bidreport0']/a/span[1]")
+	@FindBy(xpath = "//*[@id='mainmenu-Bidreport0']/a/span[2]")
 	WebElement a_BidsOptions;
 	@FindBy(xpath = "//*[@id='mainmenu-report0502']/a/span[text()='Custom Guides']")
 	WebElement txt_CustomGuides;
@@ -64,6 +64,7 @@ public class CommonKohl {
 	WebElement hdr_Text;
 	@FindBy(xpath = "//span[@class='globalButtonBar']/*[@title='Sign Off']")
 	WebElement txt_SignOff;
+	
 
 	public CommonKohl() {
 		PageFactory.initElements(getDriver(), this);
@@ -71,12 +72,12 @@ public class CommonKohl {
 
 	public Boolean startPFG(String listname, String username, String password) throws InterruptedException {
 //	public static void main(String[] args) {
-//		String listname = "OG030118";
+//		String listname = "OG030118"; 38660	leevia	DEGUIDE
 //		String username = "46084";
 //		String password = "gilberts";
-		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
-		driver = RandomAction.openBrowser("chrome", path);
-		setDriver(driver);
+//		String path = System.getProperty("user.home") + "\\Downloads\\chromedriver_win32\\chromedriver.exe";
+//		driver = RandomAction.openBrowser("chrome", path);
+//		setDriver(driver);
 		com = new CommonKohl();
 		wait = new WebDriverWait(driver, 30);
 		try {
@@ -96,21 +97,7 @@ public class CommonKohl {
 
 			// do {
 			com.clickList(listname);
-			// Thread.sleep(5000);
-			// try {
-			// String header = com.lnk_advanced.getText();
-			// System.out.println(header);
-			// break;
-			// } catch (Exception e) {
-			// com.retry++;
-			// if (com.retry == maxtry) {
-			// System.out.println("Order guide not clicked .. ");
-			// throw new AutomationException("Order guide list not clicked .. ", 101);
-			// }
-			// System.out.println("retrying to click on OG .. ");
-			// }
-			// } while (com.retry < maxtry);
-
+			
 			System.out.println("Order guide clicked ..");
 			// pop-up
 			Thread.sleep(5000);
@@ -161,8 +148,8 @@ public class CommonKohl {
 		act = new Actions(driver);
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_Reports));
 		lnk_Reports.click();
-		wait.until(ExpectedConditions.elementToBeClickable(lnk_Guides));
-		lnk_Guides.click();
+//		wait.until(ExpectedConditions.elementToBeClickable(lnk_Guides));
+//		lnk_Guides.click();
 		if (!listname.equalsIgnoreCase("History")) {
 			while (retry < maxtry) {
 				act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(txt_CustomGuides).build().perform();
@@ -183,9 +170,12 @@ public class CommonKohl {
 
 	private boolean checkPopUpDisplay() {
 		try {
+			RandomAction.isIframePresent(driver);
 			popUp_SelectGuide.isDisplayed();
-			driver.switchTo().frame(1);
+			wait.until(ExpectedConditions.visibilityOf(popUp_SelectGuide));
+			driver.switchTo().frame(popUp_SelectGuide);
 			System.out.println("switched to frame 1");
+			RandomAction.isIframePresent(driver);
 			driver.switchTo().frame("Custom-iFrame0");
 			System.out.println("Switched to content frame");
 			return true;
@@ -197,9 +187,16 @@ public class CommonKohl {
 	}
 
 	public void login(String username, String password) throws InterruptedException {
+		if (username.contains(".0")) {
+			username = username.substring(0,username.indexOf('.'));
+		}
+		if (password.contains(".0")) {
+			password = password.substring(0,password.indexOf('.'));
+		}
+		
 		driver.get(url);
 		while (retry < maxtry) {
-			if (!driver.getCurrentUrl().contains("onlinefoodservice.com")) {
+			if (!driver.getCurrentUrl().contains("kohlwholesale.com")) {
 				Thread.sleep(3000);
 			} else {
 				break;
@@ -208,6 +205,7 @@ public class CommonKohl {
 
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		Thread.sleep(3000);
+		driver.switchTo().frame("ContentFrame");
 		WebElement userName = wait.until(ExpectedConditions.visibilityOf(txt_Username));
 		userName.sendKeys(username);
 		WebElement pwd = wait.until(ExpectedConditions.visibilityOf(txt_Password));
