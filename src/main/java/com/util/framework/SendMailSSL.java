@@ -507,4 +507,73 @@ public class SendMailSSL {
 
 	}
 
+	public static void sendReports(String Subject, String... filenames) {
+		try {
+			// Properties Constant = new Properties();
+			// Constant.load(new FileInputStream("Config.properties"));
+			// String to = Constant.getProperty("reportTo");
+			// String user = Constant.getProperty("sendMailFrom");// change
+			// // accordingly
+			String user = Constant.sendMailFrom;
+			String[] to = Constant.reportTo;
+			String cc = Constant.cc;
+			// get connection
+			Session session = createConnection();
+
+			MimeMessage message = new MimeMessage(session);
+
+			MimeMessage messageBodyPart1 = new MimeMessage(session);
+			messageBodyPart1.setFrom(new InternetAddress(user));// change
+			// accordingly
+
+			InternetAddress[] recipientAddress = new InternetAddress[to.length];
+			int counter = 0;
+			for (String recipient : to) {
+				recipientAddress[counter] = new InternetAddress(recipient.trim());
+				counter++;
+			}
+
+			messageBodyPart1.addRecipients(Message.RecipientType.TO, recipientAddress);
+			messageBodyPart1.setRecipient(Message.RecipientType.CC, new InternetAddress(cc));
+
+			// Subject of mails
+			message.setSubject(Subject);
+			// Body of mails
+			String date = RandomAction.getDate();
+			message.setContent("Attached is the report for the OG export on : " + date, "text");
+
+			// message.setText();
+
+			// 4) create new MimeBodyPart object and set DataHandler object to
+			// this object
+			MimeBodyPart messageBodyPart2 = new MimeBodyPart();
+for (String filename : filenames) {
+	DataSource source = new FileDataSource(filename);
+	messageBodyPart2.setDataHandler(new DataHandler(source));
+	messageBodyPart2.setFileName(filename);
+	logger.info("Attached file - " + filename);
+
+}	
+			Multipart multipart = new MimeMultipart();
+			multipart.addBodyPart(messageBodyPart2);
+
+			message.setContent(multipart);
+
+			Transport.send(message, messageBodyPart1.getAllRecipients());
+
+			logger.info("Message send success");
+
+		} catch (AddressException e) {
+			e.printStackTrace();
+			logger.info("Technical issue in sending reporting");
+		} catch (MessagingException e) {
+			e.printStackTrace();
+			logger.info("Technical issue in sending reporting");
+		} catch (Exception e) {
+			logger.info(e.getMessage());
+			logger.info("Technical issue in sending reporting");
+		}
+
+	}
+
 }
