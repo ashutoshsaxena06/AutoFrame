@@ -2,6 +2,7 @@ package com.util.framework;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -286,6 +287,7 @@ public class CommonSysco {
 			ddl_expFormat.selectByValue("6");
 			logger.info("selected value for file type - 6");
 
+			Thread.sleep(2000);
 			WebElement chk_IncludePricing = driver.findElement(By.xpath("//input[@id='expIncludePricingCheckBox']"));
 			chk_IncludePricing.click();
 			if (!chk_IncludePricing.isSelected()) {
@@ -294,11 +296,21 @@ public class CommonSysco {
 			} else {
 				logger.info("Include Pricing already selected");
 			}
+			Thread.sleep(2000);
 
 			WebElement chk_IncludeStatus = driver.findElement(By.xpath("//input[@id='expIncludePSMSCheckBox']"));
 			chk_IncludeStatus.click();
 			logger.info("checked to Include Status - " + chk_IncludeStatus.isSelected());
 
+			Thread.sleep(2000);
+
+			// pre export check
+			if (chk_IncludePricing.isSelected() && chk_IncludeStatus.isSelected()) {
+				logger.info("pre export check status is Ok ");
+				String id = "sysco" + AccountID + " " + RandomAction.getDate();
+				RandomAction.errorScreenshot(driver, id);
+			}
+			
 			WebElement btn_Export = wait.until(ExpectedConditions
 					.elementToBeClickable(driver.findElement(By.xpath("//div/button[contains(.,'Export')]"))));
 			Assert.assertEquals(btn_Export.isDisplayed(), true);
@@ -329,6 +341,7 @@ public class CommonSysco {
 			return false;
 		}
 	}
+
 
 	private void selectAccount(String accountID) {
 		WebElement lnk_AccountID = wait.until(ExpectedConditions

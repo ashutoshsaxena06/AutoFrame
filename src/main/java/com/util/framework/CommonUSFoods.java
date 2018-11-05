@@ -53,7 +53,7 @@ public class CommonUSFoods {
 	// List selection
 	public void setOrderGuide(String OGName) {
 		WebElement OrderGuide = wait
-				.until(ExpectedConditions.elementToBeClickable(By.xpath("//td/..//a[contains(.,'" + OGName + "')]")));
+				.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//div[@id='r1:0:pt1:pt_pgl116']//td/..//a[contains(.,'" + OGName + "')]"))));
 		// By.xpath("//div[@class='x2ml dropDownMenu-UtilityMenu
 		// x1a']/*/*/*/a[contains(.,'" + OGName + "')]"))); //
 		// div[@id='r1:0:pt1:pt_i3:0:pt_sfm1:pt_pgl44']
@@ -62,7 +62,7 @@ public class CommonUSFoods {
 
 	public void setOptions(String OGName) {
 		WebElement Options = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(.,'" + OGName
-				+ "')]/ancestor::td[2]/following-sibling::td/..//a[contains(.,'Options')]")));
+				+ "')]/ancestor::td[2]/following-sibling::td/..//a[starts-with(.,'Options')]")));
 		CommonUSFoods.Options = Options;
 	}
 
@@ -135,6 +135,7 @@ public class CommonUSFoods {
 			}
 			
 			Thread.sleep(3000);
+			
 			clickList(listname);
 
 			Thread.sleep(5000);
@@ -192,28 +193,22 @@ public class CommonUSFoods {
 
 	public void clickList(String listname) throws InterruptedException {
 //		wait = new WebDriverWait(driver, 30);
-
-		Actions act = new Actions(driver);
-		driver.get(listUrl);
-		com.setOrderGuide(listname);
-		if (OrderGuide.getText().equalsIgnoreCase(listname)) {
-			JavascriptExecutor je = (JavascriptExecutor) driver;			 
-			je.executeScript("arguments[0].scrollIntoView(true);",OrderGuide);
-			setOptions(listname);
-			Options.click();
-			Thread.sleep(2000);
-			com.lnk_Download.click();
-		} else {
-			System.out.println("OrderGuide name not found on list download page");
+		try {
+			Actions act = new Actions(driver);
+			driver.get(listUrl);
+			System.out.println("On View Lists page");
+			com.setOrderGuide(listname);
+				JavascriptExecutor je = (JavascriptExecutor) driver;			 
+				je.executeScript("arguments[0].scrollIntoView(true);",OrderGuide);
+				setOptions(listname);
+				Options.click();
+				Thread.sleep(2000);
+				com.lnk_Download.click();
+				System.out.println("Order Guide name found on list download page");
+		} catch (Exception e) {
+			System.out.println("Order guide select failed");
+			e.printStackTrace();
 		}
-		// CommonUSFoods.OrderGuide.click();
-		// Thread.sleep(5000);
-		// WebElement ListBtn =
-		// wait.until(ExpectedConditions.elementToBeClickable(com.btn_ListIcon));
-		// act.moveToElement(ListBtn).build().perform();
-		// act.click().perform();
-		// // System.out.println(ListBtn.getText());
-		// Thread.sleep(5000);
 	}
 
 	public void downloadFile(String filename) {

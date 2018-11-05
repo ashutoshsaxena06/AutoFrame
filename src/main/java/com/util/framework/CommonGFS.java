@@ -301,7 +301,7 @@ public class CommonGFS {
 		// TODO Auto-generated method stub
 		// logger.info("The account name appear on system is
 		// -"+driver.findElement(By.xpath("")).getText());
-		driver.findElement(By.xpath("//div[@class='productTableCell accountNumCol ng-binding'][contains(.,'" + AcName + "')]")).click();
+		driver.findElement(By.xpath("//div[@class='product-table-cell accountNumCol ng-binding'][contains(.,'" + AcName + "')]")).click();
 		logger.info(AcName + " is selected");
 	}
 

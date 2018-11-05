@@ -12,10 +12,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.WildcardFileFilter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -286,6 +289,25 @@ public class RandomAction {
 		try {
 			driver.switchTo().alert().dismiss();
 		} catch (NoAlertPresentException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void errorScreenshot(WebDriver driver, String orderID) {
+		// Take screenshot and store as a file format
+		// WaitForPageToLoad(30);
+
+		try {
+			// now copy the screenshot to desired location using copyFile
+			// //method
+			File src = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+
+			FileUtils.copyFile(src,
+					new File("C:\\Users\\Edge\\Desktop\\Reports\\Screenshots\\" + orderID + ".png")); // System.currentTimeMillis()
+		}
+
+		catch (Exception e) {
+			System.out.println("Screenshot failed");
 			e.printStackTrace();
 		}
 	}

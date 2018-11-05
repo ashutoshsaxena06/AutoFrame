@@ -20,7 +20,6 @@ import javax.mail.internet.MimeMultipart;
 
 import org.apache.log4j.Logger;
 
-
 public class SendMailSSL {
 	private final static Logger logger = Logger.getLogger(SendMailSSL.class);
 
@@ -47,24 +46,22 @@ public class SendMailSSL {
 	}
 
 	/*
-	 * public static IMAPSSLStore createConnection() throws MessagingException {
-	 * // Create IMAPSSLStore object Properties props = System.getProperties();
+	 * public static IMAPSSLStore createConnection() throws MessagingException { //
+	 * Create IMAPSSLStore object Properties props = System.getProperties();
 	 * props.setProperty("mail.store.protocol", "imaps");
 	 * 
 	 * Session session = Session.getDefaultInstance(props, new
 	 * javax.mail.Authenticator() { protected PasswordAuthentication
 	 * getPasswordAuthentication() { return new
-	 * PasswordAuthentication(Constant.GmailUser, Constant.GmailPassword);//
-	 * change // accordingly } }); URLName urlName = new
-	 * URLName("imap.gmail.com"); IMAPSSLStore store = new IMAPSSLStore(session,
-	 * urlName);
+	 * PasswordAuthentication(Constant.GmailUser, Constant.GmailPassword);// change
+	 * // accordingly } }); URLName urlName = new URLName("imap.gmail.com");
+	 * IMAPSSLStore store = new IMAPSSLStore(session, urlName);
 	 * 
-	 * // All sysout statements are used for testing, have to remove them //
-	 * while implementation System.out.println("Connecting to gmail...");
+	 * // All sysout statements are used for testing, have to remove them // while
+	 * implementation System.out.println("Connecting to gmail...");
 	 * 
 	 * // Connect to GMail, enter user name and password here
-	 * store.connect("imap.gmail.com", Constant.GmailUser,
-	 * Constant.GmailPassword);
+	 * store.connect("imap.gmail.com", Constant.GmailUser, Constant.GmailPassword);
 	 * 
 	 * System.out.println("Connected to - " + store);
 	 * 
@@ -81,7 +78,7 @@ public class SendMailSSL {
 			// get connection
 			Session session = createConnection();
 			// String filepath = RandomAction.setdownloadDir();
-			File GFS_OG = RandomAction.getLatestFilefromDirxlsx(System.getProperty("user.home")+"\\Downloads\\");
+			File GFS_OG = RandomAction.getLatestFilefromDirxlsx(System.getProperty("user.home") + "\\Downloads\\");
 			String filename = GFS_OG.getAbsolutePath();
 			System.out.println(filename);
 
@@ -102,7 +99,8 @@ public class SendMailSSL {
 			// Subject of mails
 			message.setSubject("OnLineMacro :: " + PurveyorName + " :: " + Restaurantname);
 			// Body of mails
-//			message.setContent("Cheney OG export- date & time : " + RandomAction.getDate(), "text");
+			// message.setContent("Cheney OG export- date & time : " +
+			// RandomAction.getDate(), "text");
 
 			// message.setText();
 
@@ -146,7 +144,7 @@ public class SendMailSSL {
 		}
 
 	}
-	
+
 	public static void sendMailActionXls(String PurveyorName, String Restaurantname) {
 		String to = Constant.sendMailToDE;
 		String user = Constant.sendMailFrom;// change
@@ -155,7 +153,7 @@ public class SendMailSSL {
 			// get connection
 			Session session = createConnection();
 			// String filepath = RandomAction.setdownloadDir();
-			File GFS_OG = RandomAction.getLatestFilefromDirxls(System.getProperty("user.home")+"\\Downloads\\");
+			File GFS_OG = RandomAction.getLatestFilefromDirxls(System.getProperty("user.home") + "\\Downloads\\");
 			String filename = GFS_OG.getAbsolutePath();
 			System.out.println(filename);
 
@@ -176,7 +174,8 @@ public class SendMailSSL {
 			// Subject of mails
 			message.setSubject("OnLineMacro :: " + PurveyorName + " :: " + Restaurantname);
 			// Body of mails
-//			message.setContent("Cheney OG export- date & time : " + RandomAction.getDate(), "text");
+			// message.setContent("Cheney OG export- date & time : " +
+			// RandomAction.getDate(), "text");
 
 			// message.setText();
 
@@ -220,6 +219,7 @@ public class SendMailSSL {
 		}
 
 	}
+
 	public static void sendMailActionPDF(String PurveyorName, String Restaurantname) {
 		String to = Constant.sendMailToDE;
 		String user = Constant.sendMailFrom;// change
@@ -228,7 +228,7 @@ public class SendMailSSL {
 			// get connection
 			Session session = createConnection();
 			// String filepath = RandomAction.setdownloadDir();
-			File GFS_OG = RandomAction.getLatestFilefromDirPDF(System.getProperty("user.home")+"\\Downloads\\");
+			File GFS_OG = RandomAction.getLatestFilefromDirPDF(System.getProperty("user.home") + "\\Downloads\\");
 			String filename = GFS_OG.getAbsolutePath();
 			System.out.println(filename);
 
@@ -249,7 +249,8 @@ public class SendMailSSL {
 			// Subject of mails
 			message.setSubject("OnLineMacro :: " + PurveyorName + " :: " + Restaurantname);
 			// Body of mails
-//			message.setContent("Cheney OG export- date & time : " + RandomAction.getDate(), "text");
+			// message.setContent("Cheney OG export- date & time : " +
+			// RandomAction.getDate(), "text");
 
 			// message.setText();
 
@@ -293,6 +294,7 @@ public class SendMailSSL {
 		}
 
 	}
+
 	public static void sendMailActionCsvDE(String PurveyorName, String Restaurantname) {
 		String to = Constant.sendMailToDE;
 		String user = Constant.sendMailFrom;// change
@@ -301,7 +303,7 @@ public class SendMailSSL {
 			// get connection
 			Session session = createConnection();
 			// String filepath = RandomAction.setdownloadDir();
-			File GFS_OG = RandomAction.getLatestFilefromDirCsv(System.getProperty("user.home")+"\\Downloads\\");
+			File GFS_OG = RandomAction.getLatestFilefromDirCsv(System.getProperty("user.home") + "\\Downloads\\");
 			String filename = GFS_OG.getAbsolutePath();
 			System.out.println(filename);
 
@@ -322,7 +324,8 @@ public class SendMailSSL {
 			// Subject of mails
 			message.setSubject("OnLineMacro :: " + PurveyorName + " :: " + Restaurantname);
 			// Body of mails
-//			message.setContent("Cheney OG export- date & time : " + RandomAction.getDate(), "text");
+			// message.setContent("Cheney OG export- date & time : " +
+			// RandomAction.getDate(), "text");
 
 			// message.setText();
 
@@ -366,6 +369,7 @@ public class SendMailSSL {
 		}
 
 	}
+
 	public static void sendMailActionCsvES(String PurveyorName, String Restaurantname) {
 		String to = Constant.sendMailToEsave;
 		String user = Constant.sendMailFrom;// change
@@ -374,7 +378,7 @@ public class SendMailSSL {
 			// get connection
 			Session session = createConnection();
 			// String filepath = RandomAction.setdownloadDir();
-			File GFS_OG = RandomAction.getLatestFilefromDirCsv(System.getProperty("user.home")+"\\Downloads\\");
+			File GFS_OG = RandomAction.getLatestFilefromDirCsv(System.getProperty("user.home") + "\\Downloads\\");
 			String filename = GFS_OG.getAbsolutePath();
 			System.out.println(filename);
 
@@ -395,7 +399,8 @@ public class SendMailSSL {
 			// Subject of mails
 			message.setSubject("OnLineMacro :: " + PurveyorName + " :: " + Restaurantname);
 			// Body of mails
-//			message.setContent("Cheney OG export- date & time : " + RandomAction.getDate(), "text");
+			// message.setContent("Cheney OG export- date & time : " +
+			// RandomAction.getDate(), "text");
 
 			// message.setText();
 
@@ -439,6 +444,7 @@ public class SendMailSSL {
 		}
 
 	}
+
 	public static void sendReport(String Subject, String filename) {
 		try {
 			// Properties Constant = new Properties();
@@ -547,13 +553,13 @@ public class SendMailSSL {
 			// 4) create new MimeBodyPart object and set DataHandler object to
 			// this object
 			MimeBodyPart messageBodyPart2 = new MimeBodyPart();
-for (String filename : filenames) {
-	DataSource source = new FileDataSource(filename);
-	messageBodyPart2.setDataHandler(new DataHandler(source));
-	messageBodyPart2.setFileName(filename);
-	logger.info("Attached file - " + filename);
+			for (String filename : filenames) {
+				DataSource source = new FileDataSource("C:\\Users\\ImportOrder\\Log\\"+ filename);
+				messageBodyPart2.setDataHandler(new DataHandler(source));
+				messageBodyPart2.setFileName(filename);
+				logger.info("Attached file - " + filename);
 
-}	
+			}
 			Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart2);
 
