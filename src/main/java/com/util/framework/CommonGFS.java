@@ -48,6 +48,7 @@ public class CommonGFS {
 	public boolean isAlertPresent(WebDriver driver) {
 		try {
 			driver.findElement(By.xpath("//button[@class='button gfsexperience-modal-close']")).click();
+			Thread.sleep(90000);
 			logger.info("Alert handled");
 			return true;
 		} catch (NoAlertPresentException Ex) {
@@ -56,7 +57,7 @@ public class CommonGFS {
 		} catch (NoSuchElementException e) {
 			logger.info("No alert found");
 			return false;
-		} catch (WebDriverException e) {
+		} catch (Exception e) {
 			logger.info("No alert found");
 			return false;
 		}

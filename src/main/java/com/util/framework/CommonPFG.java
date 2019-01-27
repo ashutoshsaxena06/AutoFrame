@@ -144,7 +144,7 @@ public class CommonPFG {
 		Thread.sleep(5000);
 		wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[@id='ContentFrame']"))));
 		driver.switchTo().frame("ContentFrame");
-        Thread.sleep(3000);
+		Thread.sleep(3000);
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_advanced));
 		lnk_advanced.click();
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_displayPrices));
@@ -169,7 +169,16 @@ public class CommonPFG {
 		lnk_Reports.click();
 		wait.until(ExpectedConditions.elementToBeClickable(lnk_Guides));
 		lnk_Guides.click();
-		if (!listname.equalsIgnoreCase("History")) {
+		if (listname.equalsIgnoreCase("History")) {
+			act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(lnk_History).build().perform();
+			System.out.println("clicked list");
+		} else if (listname.equalsIgnoreCase("Bids")) {
+			wait.until(ExpectedConditions.elementToBeClickable(lnk_Guides));
+			lnk_Bids.click();
+			act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).moveToElement(lnk_Bids).click(a_BidsOptions).build().perform();
+			System.out.println("clicked list");
+		} else {
+			// other than bids or history
 			while (retry < maxtry) {
 				act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(txt_CustomGuides).build().perform();
 				Thread.sleep(2000);
@@ -182,11 +191,8 @@ public class CommonPFG {
 			// WebElement OG = OGelement(listname);
 			System.out.println("selected Order guide .. " + OG.getText());
 			OG.click();
-		} else {
-			act.moveToElement(lnk_Reports).moveToElement(lnk_Guides).click(lnk_History).build().perform();
-			System.out.println("");
-		}
 
+		}
 	}
 
 	private boolean checkPopUpDisplay() {
